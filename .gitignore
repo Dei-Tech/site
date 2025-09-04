@@ -1,8 +1,10 @@
-/static
-
+# Hugo build outputs
 public/
 resources/_gen/
 .hugo_build.lock
+
+# Static files (generated during build)
+static/
 
 # Node.js
 node_modules/

@@ -2,6 +2,8 @@
 
 Welcome to the official repository for **Deitech's** business website! 🎉
 
+> **🚧 Work in Progress** - This website is currently under active development.
+
 ## 🚀 About This Project
 
 This website is built using the **Hugo** framework and is designed to be **safe**, **fast**, and **super responsive**. It serves as a platform to showcase our expertise in:
@@ -12,11 +14,12 @@ This website is built using the **Hugo** framework and is designed to be **safe*
 
 ## 📂 Project Structure
 
-- **`content/`**: Contains all the static content for the site, including pages and blog posts.
+- **`content/`**: Contains all the site content, including pages and blog posts.
 - **`layouts/`**: Custom layouts and templates for structuring pages.
-- **`static/`**: Static assets like images, CSS, and JavaScript files.
+- **`assets/`**: Source assets like images, SCSS, and JavaScript files.
 - **`themes/`**: Hugo themes utilized for styling and appearance.
-- **`config.toml`**: Configuration file for setting up site parameters.
+- **`hugo.toml`**: Main configuration file for site parameters.
+- **`static/`**: Generated static files (auto-created during build).
 
 ## 🛠️ Getting Started
 
