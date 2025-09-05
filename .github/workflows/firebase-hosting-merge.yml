@@ -3,14 +3,17 @@
 
 name: Deploy to Production (Firebase Hosting)
 on:
+  push:
+    branches:
+      - main
   pull_request:
     types: [closed]
     branches:
       - main
 jobs:
   build_and_deploy:
-    # Only run if the PR was actually merged (not just closed)
-    if: github.event.pull_request.merged == true
+    # Run on push to main OR if the PR was actually merged (not just closed)
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
