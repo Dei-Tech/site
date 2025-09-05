@@ -1,0 +1,35 @@
+# Dev branch preview deployment
+# Triggers on pushes to dev branch for development testing
+
+name: Deploy Dev Preview (Firebase Hosting)
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: read
+  
+jobs:
+  build_and_deploy_dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true
+          
+      - name: Build Hugo site
+        run: hugo --minify
+        
+      - name: Deploy to Firebase Hosting Dev Preview
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEITECH_SITE_C5C6F }}
+          channelId: dev-preview
+          projectId: deitech-site-c5c6f

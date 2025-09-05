@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | {{ .Site.Title }}</title>
+    
+    <!-- Hugo Asset Pipeline for CSS -->
+    {{ $css := resources.Get "css/index.css" }}
+    {{ $style := $css | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>DeiTech</h1>
+            <div class="tagline">Page Not Found</div>
+        </div>
+        
+        <div class="main-content">
+            <h2>Oops! Page Not Found</h2>
+            <p class="description">
+                The page you're looking for doesn't exist. Our site is currently under development.
+            </p>
+            
+            <div class="status">
+                <a href="/" style="color: white; text-decoration: none;">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
