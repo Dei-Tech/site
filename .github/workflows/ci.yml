@@ -37,15 +37,15 @@ jobs:
       - name: 📦 Build Hugo site
         run: |
           echo "🏗️ Building Hugo site..."
-          hugo --minify --verbose
+          hugo --minify
           
       - name: ✅ Verify build output
         run: |
           echo "📊 Build verification:"
           echo "✓ Public directory exists: $(test -d public && echo 'YES' || echo 'NO')"
           echo "✓ Index.html exists: $(test -f public/index.html && echo 'YES' || echo 'NO')"
-          echo "✓ CSS assets exist: $(test -f public/css/*.css && echo 'YES' || echo 'NO')"
-          echo "✓ JS assets exist: $(test -f public/js/*.js && echo 'YES' || echo 'NO')"
+          echo "✓ CSS assets exist: $(find public -name "*.css" | wc -l) CSS files found"
+          echo "✓ JS assets exist: $(find public -name "*.js" | wc -l) JS files found"
           echo ""
           echo "📁 Generated files:"
           find public -type f | head -10
