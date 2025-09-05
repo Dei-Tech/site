@@ -16,14 +16,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Hugo Asset Pipeline for CSS -->
-    {{ $css := resources.Get "css/redirect.css" }}
+    {{ $css := resources.Get "css/index.css" }}
     {{ $style := $css | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
 </head>
 <body>
-    <div class="redirect-message">
+    <div class="redirect-container">
         <h1>DeiTech</h1>
-        <p>Redirecting to our work in progress page<span class="loading-dots"></span></p>
+        <p>Redirecting to our work in progress page...</p>
         <a href="{{ .Params.redirect_to | default "/wip/" }}" class="redirect-link">
             Continue to Site →
         </a>
