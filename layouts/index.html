@@ -6,54 +6,37 @@
     <title>{{ .Title }} | {{ .Site.Title }}</title>
     <meta name="description" content="{{ .Description | default .Site.Params.description }}">
     
+    <!-- Redirect to WIP page -->
+    <meta http-equiv="refresh" content="0; url={{ .Params.redirect_to | default "/wip/" }}">
+    <link rel="canonical" href="{{ .Params.redirect_to | default "/wip/" | absURL }}">
+    
     <!-- Preload fonts for smooth loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Hugo Asset Pipeline for CSS -->
-    {{ $css := resources.Get "css/index.css" }}
+    {{ $css := resources.Get "css/redirect.css" }}
     {{ $style := $css | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <h1>DeiTech</h1>
-            <div class="tagline">Business Solutions</div>
-        </div>
-        
-        <div class="main-content">
-            <h2>We're Building Something Amazing</h2>
-            <p class="description">
-                Our new website is currently under development. We're crafting a premium experience 
-                to showcase our comprehensive business solutions.
-            </p>
-            
-            <div class="services">
-                <div class="service">
-                    <h3>🎨 Website Design</h3>
-                    <p>Modern, responsive websites tailored to your business needs with cutting-edge design principles.</p>
-                </div>
-                <div class="service">
-                    <h3>🚀 Online Platforms</h3>
-                    <p>Comprehensive digital solutions using Google's suite of tools and modern technologies.</p>
-                </div>
-                <div class="service">
-                    <h3>📈 Business Development</h3>
-                    <p>Digital services and strategies to help emerging businesses grow and succeed online.</p>
-                </div>
-            </div>
-            
-            <div class="status">
-                Coming Soon<span class="dots"></span>
-            </div>
-        </div>
+    <div class="redirect-message">
+        <h1>DeiTech</h1>
+        <p>Redirecting to our work in progress page<span class="loading-dots"></span></p>
+        <a href="{{ .Params.redirect_to | default "/wip/" }}" class="redirect-link">
+            Continue to Site →
+        </a>
     </div>
-
+    
     <!-- Hugo Asset Pipeline for JavaScript -->
-    {{ $js := resources.Get "js/index.js" }}
+    {{ $js := resources.Get "js/redirect.js" }}
     {{ $script := $js | resources.Minify | resources.Fingerprint }}
     <script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+    
+    <!-- Pass redirect URL to JavaScript -->
+    <script>
+        document.body.dataset.redirectUrl = "{{ .Params.redirect_to | default "/wip/" }}";
+    </script>
 </body>
 </html>

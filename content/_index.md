@@ -1,22 +1,11 @@
 ---
-title: "DeiTech - Coming Soon"
-description: "Professional business solutions under development. Website design, online platforms, and business development services."
-layout: "landing"
+title: "DeiTech - Under Development"
+description: "DeiTech website is under development. Please visit our work in progress page."
+layout: "redirect"
 type: "page"
-date: 2025-01-04
-draft: false
+redirect_to: "/wip/"
 ---
 
-# We're Building Something Amazing
+# Redirecting...
 
-Our new website is currently under development. We're crafting a premium experience to showcase our business solutions.
-
-## What We Do
-
-- **Website Design** - Modern, responsive websites tailored to your business
-- **Online Platforms** - Comprehensive digital solutions using cutting-edge tools  
-- **Business Development** - Digital services to help your business grow
-
-## Coming Soon
-
-Stay tuned for our launch. We're putting the finishing touches on something special.
+Our website is currently under development. You will be redirected to our work in progress page.
