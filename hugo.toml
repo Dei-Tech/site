@@ -1,3 +1,8 @@
-baseURL = 'https://example.org/'
+baseURL = '/'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = 'DeiTech - Business Solutions'
+description = 'Professional website design, online platform creation, and business development services.'
+
+[params]
+  author = 'DeiTech'
+  organization = 'DeiTech'
