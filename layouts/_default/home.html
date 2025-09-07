@@ -1,0 +1,87 @@
+{{ define "main" }}
+
+<!-- Hero Section -->
+<section class="hero section">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text animate-on-scroll">
+                <h1 class="hero-title">{{ .Params.hero.title | markdownify }}</h1>
+                <p class="hero-subtitle">{{ .Params.hero.subtitle | markdownify }}</p>
+                <div class="hero-actions">
+                    <a href="{{ .Params.hero.primary_cta.url }}" class="btn btn-primary">{{ .Params.hero.primary_cta.text }}</a>
+                    <a href="{{ .Params.hero.secondary_cta.url }}" class="btn btn-secondary">{{ .Params.hero.secondary_cta.text }}</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-graphic" data-parallax></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="services-section section">
+    <div class="container">
+        <div class="section-header animate-on-scroll">
+            <h2 class="section-title">{{ .Params.services_section.title }}</h2>
+            <p class="section-subtitle">
+                {{ .Params.services_section.subtitle }}
+            </p>
+        </div>
+        
+        <div class="services-grid">
+            {{ range .Params.services_section.services }}
+            <div class="card service-card">
+                <div class="service-icon">{{ .icon }}</div>
+                <h3>{{ .title }}</h3>
+                <p>{{ .text }}</p>
+                <a href="{{ .url }}" class="service-link">Learn More →</a>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="why-choose-us section">
+    <div class="container">
+        <div class="section-header animate-on-scroll">
+            <h2 class="section-title">{{ .Params.features_section.title }}</h2>
+            <p class="section-subtitle">
+                {{ .Params.features_section.subtitle }}
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            {{ range .Params.features_section.features }}
+            <div class="feature-item animate-on-scroll">
+                <div class="feature-number">{{ .number }}</div>
+                <h3>{{ .title }}</h3>
+                <p>{{ .text }}</p>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section id="contact" class="cta-section section">
+    <div class="container">
+        <div class="cta-content animate-on-scroll">
+            <h2>{{ .Params.cta_section.title }}</h2>
+            <p>{{ .Params.cta_section.subtitle }}</p>
+            <div class="cta-actions">
+                <a href="{{ .Params.cta_section.primary_cta.url }}" class="btn btn-primary">{{ .Params.cta_section.primary_cta.text }}</a>
+                <a href="{{ .Params.cta_section.secondary_cta.url }}" class="btn btn-secondary">{{ .Params.cta_section.secondary_cta.text }}</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{ end }}
+
+{{ define "css" }}
+    {{ $css := resources.Get "css/home.css" }}
+    {{ $style := $css | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
+{{ end }}

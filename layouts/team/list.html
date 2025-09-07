@@ -1,0 +1,95 @@
+{{ define "main" }}
+
+<!-- Hero Section -->
+<section class="page-hero section">
+    <div class="container">
+        <div class="page-hero-content animate-on-scroll">
+            <h1 class="page-title">{{ .Title }}</h1>
+            <p class="page-subtitle">{{ .Content | markdownify }}</p>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="team-section section">
+    <div class="container">
+        <div class="section-header animate-on-scroll">
+            <h2 class="section-title">{{ .Params.section_header.title }}</h2>
+            <p class="section-subtitle">
+                {{ .Params.section_header.subtitle }}
+            </p>
+        </div>
+        
+        <div class="team-grid">
+            {{ range sort .Pages "Params.order" }}
+            <div class="card team-member">
+                <div class="member-image">
+                    {{ if .Params.image }}
+                    <img src="{{ .Params.image }}" alt="{{ .Title }}" loading="lazy">
+                    {{ else }}
+                    <div class="member-placeholder">
+                        <span>👤</span>
+                    </div>
+                    {{ end }}
+                </div>
+                <div class="member-info">
+                    <h3>{{ .Title }}</h3>
+                    <p class="member-role">{{ .Params.role }}</p>
+                    <p class="member-description">{{ .Content | markdownify }}</p>
+                    {{ if .Params.expertise }}
+                    <div class="member-expertise">
+                        {{ range .Params.expertise }}
+                        <span class="expertise-tag">{{ . }}</span>
+                        {{ end }}
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</section>
+
+<!-- Values Section -->
+<section class="values-section section">
+    <div class="container">
+        <div class="section-header animate-on-scroll">
+            <h2 class="section-title">{{ .Params.values_header.title }}</h2>
+            <p class="section-subtitle">
+                {{ .Params.values_header.subtitle }}
+            </p>
+        </div>
+        
+        <div class="values-grid">
+            {{ range .Params.values }}
+            <div class="value-item animate-on-scroll">
+                <div class="value-icon">{{ .icon }}</div>
+                <h3>{{ .title }}</h3>
+                <p>{{ .text }}</p>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</section>
+
+<!-- Join Us CTA -->
+<section class="join-cta section">
+    <div class="container">
+        <div class="cta-content animate-on-scroll">
+            <h2>{{ .Params.cta.title }}</h2>
+            <p>{{ .Params.cta.subtitle }}</p>
+            <div class="cta-actions">
+                <a href="#contact" class="btn btn-primary">Start Your Project</a>
+                <a href="/our-work/" class="btn btn-secondary">View Our Work</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{ end }}
+
+{{ define "css" }}
+    {{ $css := resources.Get "css/team.css" }}
+    {{ $style := $css | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
+{{ end }}
