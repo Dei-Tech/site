@@ -22,7 +22,7 @@
         
         <div class="pricing-grid">
             {{ range sort .Pages "Params.order" }}
-            <div class="card pricing-card {{ if .Params.featured }}featured{{ end }}">
+            <div class="card pricing-card {{ if .Params.featured }}featured{{ end }}" no-tilt>
                 <div class="pricing-header">
                     <h3>{{ .Title }}</h3>
                     <div class="pricing-badge {{ if eq .Params.badge_type "popular" }}popular{{ end }}">{{ .Params.badge }}</div>
