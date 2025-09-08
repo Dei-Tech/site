@@ -6,13 +6,13 @@
     <title>{{ .Title }} | {{ .Site.Title }}</title>
     <meta name="description" content="{{ .Description | default .Site.Params.description }}">
     
-    <!-- Preload fonts for smooth loading -->
+    <!-- Preload luxury fonts for smooth loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Hugo Asset Pipeline for CSS -->
-    {{ $css := resources.Get "css/index.css" }}
+    <!-- Hugo Asset Pipeline for WIP CSS -->
+    {{ $css := resources.Get "css/wip.css" }}
     {{ $style := $css | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
 </head>
@@ -24,29 +24,29 @@
         </div>
         
         <div class="main-content">
-            <h2>We're Building Something Amazing</h2>
+            <h2>Crafting Digital Excellence</h2>
             <p class="description">
-                Our new website is currently under development. We're crafting a premium experience 
-                to showcase our comprehensive business solutions.
+                We are meticulously developing an extraordinary digital experience that embodies 
+                sophistication, innovation, and unparalleled quality in business solutions.
             </p>
             
             <div class="services">
                 <div class="service">
-                    <h3>🎨 Website Design</h3>
-                    <p>Modern, responsive websites tailored to your business needs with cutting-edge design principles.</p>
+                    <h3>✦ Bespoke Web Design</h3>
+                    <p>Luxurious, responsive digital experiences tailored exclusively for discerning businesses. Every pixel crafted with precision and purpose.</p>
                 </div>
                 <div class="service">
-                    <h3>🚀 Online Platforms</h3>
-                    <p>Comprehensive digital solutions using Google's suite of tools and modern technologies.</p>
+                    <h3>✦ Premium Digital Solutions</h3>
+                    <p>Sophisticated online platforms leveraging cutting-edge technologies and enterprise-grade infrastructure for exceptional performance.</p>
                 </div>
                 <div class="service">
-                    <h3>📈 Business Development</h3>
-                    <p>Digital services and strategies to help emerging businesses grow and succeed online.</p>
+                    <h3>✦ Strategic Growth Partnership</h3>
+                    <p>Elite consulting services designed to elevate your business presence and accelerate growth through innovative digital strategies.</p>
                 </div>
             </div>
             
             <div class="status">
-                Coming Soon<span class="dots"></span>
+                Launching Soon<span class="dots"></span>
             </div>
         </div>
     </div>

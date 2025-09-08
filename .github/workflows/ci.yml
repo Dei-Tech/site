@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   validate:
@@ -30,41 +31,164 @@ jobs:
           extended: true
           
       - name: 🔍 Validate Hugo configuration
+        id: config-check
         run: |
           echo "🔧 Checking Hugo configuration..."
-          hugo config
+          if hugo config > config-output.txt 2>&1; then
+            echo "config_status=✅ PASSED" >> $GITHUB_OUTPUT
+            echo "config_details=$(cat config-output.txt | head -5)" >> $GITHUB_OUTPUT
+          else
+            echo "config_status=❌ FAILED" >> $GITHUB_OUTPUT
+            echo "config_details=$(cat config-output.txt)" >> $GITHUB_OUTPUT
+            exit 1
+          fi
           
       - name: 📦 Build Hugo site
+        id: build
         run: |
           echo "🏗️ Building Hugo site..."
-          hugo --minify
+          if hugo --minify > build-output.txt 2>&1; then
+            echo "build_status=✅ PASSED" >> $GITHUB_OUTPUT
+            echo "build_details=Site built successfully with minification" >> $GITHUB_OUTPUT
+          else
+            echo "build_status=❌ FAILED" >> $GITHUB_OUTPUT
+            echo "build_details=$(cat build-output.txt)" >> $GITHUB_OUTPUT
+            exit 1
+          fi
           
       - name: ✅ Verify build output
+        id: verify
         run: |
           echo "📊 Build verification:"
-          echo "✓ Public directory exists: $(test -d public && echo 'YES' || echo 'NO')"
-          echo "✓ Index.html exists: $(test -f public/index.html && echo 'YES' || echo 'NO')"
-          echo "✓ CSS assets exist: $(find public -name "*.css" | wc -l) CSS files found"
-          echo "✓ JS assets exist: $(find public -name "*.js" | wc -l) JS files found"
-          echo ""
-          echo "📁 Generated files:"
-          find public -type f | head -10
-          echo ""
-          echo "📏 Build size:"
-          du -sh public/
           
-      - name: 🧪 Basic HTML validation
+          # Check public directory
+          if test -d public; then
+            public_check="✅ Public directory exists"
+          else
+            public_check="❌ Public directory missing"
+          fi
+          
+          # Check index.html
+          if test -f public/index.html; then
+            index_check="✅ Index.html exists"
+          else
+            index_check="❌ Index.html missing"
+          fi
+          
+          # Count assets
+          css_count=$(find public -name "*.css" | wc -l)
+          js_count=$(find public -name "*.js" | wc -l)
+          total_files=$(find public -type f | wc -l)
+          build_size=$(du -sh public/ | cut -f1)
+          
+          # Generate summary
+          echo "verify_status=✅ PASSED" >> $GITHUB_OUTPUT
+          echo "public_check=$public_check" >> $GITHUB_OUTPUT
+          echo "index_check=$index_check" >> $GITHUB_OUTPUT
+          echo "css_count=$css_count" >> $GITHUB_OUTPUT
+          echo "js_count=$js_count" >> $GITHUB_OUTPUT
+          echo "total_files=$total_files" >> $GITHUB_OUTPUT
+          echo "build_size=$build_size" >> $GITHUB_OUTPUT
+          
+          echo "📁 Generated files (first 10):"
+          find public -type f | head -10 > file-list.txt
+          
+      - name: 🧪 HTML validation
+        id: html-check
         run: |
           echo "🔍 Checking for basic HTML structure..."
+          
           if grep -q "<html" public/index.html; then
-            echo "✓ Valid HTML structure found"
+            html_structure="✅ Valid HTML structure"
           else
-            echo "❌ Invalid HTML structure"
+            html_structure="❌ Invalid HTML structure"
+            echo "html_status=❌ FAILED" >> $GITHUB_OUTPUT
+            echo "html_details=No valid HTML structure found" >> $GITHUB_OUTPUT
             exit 1
           fi
           
           if grep -q "<title>" public/index.html; then
-            echo "✓ Page title found"
+            title_check="✅ Page title found"
           else
-            echo "⚠️ No page title found"
+            title_check="⚠️ No page title found"
           fi
+          
+          echo "html_status=✅ PASSED" >> $GITHUB_OUTPUT
+          echo "html_structure=$html_structure" >> $GITHUB_OUTPUT
+          echo "title_check=$title_check" >> $GITHUB_OUTPUT
+          
+      - name: 💬 Comment on PR (Success)
+        if: github.event_name == 'pull_request' && success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `## 🎉 Build Successful!
+            
+            ### ✅ All Checks Passed
+            
+            | Check | Status | Details |
+            |-------|--------|---------|
+            | **Hugo Config** | ${{ steps.config-check.outputs.config_status }} | Configuration validated |
+            | **Site Build** | ${{ steps.build.outputs.build_status }} | ${{ steps.build.outputs.build_details }} |
+            | **File Structure** | ${{ steps.verify.outputs.verify_status }} | ${{ steps.verify.outputs.public_check }}<br>${{ steps.verify.outputs.index_check }} |
+            | **HTML Validation** | ${{ steps.html-check.outputs.html_status }} | ${{ steps.html-check.outputs.html_structure }}<br>${{ steps.html-check.outputs.title_check }} |
+            
+            ### 📊 Build Summary
+            - **Total Files**: ${{ steps.verify.outputs.total_files }} files generated
+            - **CSS Assets**: ${{ steps.verify.outputs.css_count }} files
+            - **JS Assets**: ${{ steps.verify.outputs.js_count }} files  
+            - **Build Size**: ${{ steps.verify.outputs.build_size }}
+            
+            ### 🚀 Ready to Deploy
+            Your changes are ready for deployment! All validation checks passed.
+            
+            ---
+            *Generated by CI workflow at ${new Date().toISOString()}*`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+            
+      - name: 💬 Comment on PR (Failure)
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `## ❌ Build Failed!
+            
+            ### 🚨 Build Issues Detected
+            
+            | Check | Status | Details |
+            |-------|--------|---------|
+            | **Hugo Config** | ${{ steps.config-check.outputs.config_status || '⏳ Not reached' }} | ${{ steps.config-check.outputs.config_details || 'Check not completed' }} |
+            | **Site Build** | ${{ steps.build.outputs.build_status || '⏳ Not reached' }} | ${{ steps.build.outputs.build_details || 'Build not started' }} |
+            | **File Structure** | ${{ steps.verify.outputs.verify_status || '⏳ Not reached' }} | Build output verification |
+            | **HTML Validation** | ${{ steps.html-check.outputs.html_status || '⏳ Not reached' }} | HTML structure validation |
+            
+            ### 🔧 Debugging Information
+            
+            **Failed Step**: The build failed during one of the validation steps above.
+            
+            **Common Solutions**:
+            - Check Hugo configuration syntax in \`hugo.toml\`
+            - Verify all required assets exist in \`assets/\` folder
+            - Ensure Hugo layouts have proper syntax
+            - Check for missing dependencies or imports
+            
+            ### 📋 Next Steps
+            1. Review the error details above
+            2. Fix the identified issues
+            3. Push new commits to re-trigger the build
+            
+            ---
+            *Generated by CI workflow at ${new Date().toISOString()}*`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
