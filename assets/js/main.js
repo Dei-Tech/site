@@ -197,17 +197,22 @@ class LuxuryCardEffects {
     }
     
     setupCardEffects(card) {
+        // Check if card should have tilt effects
+        const hasTilt = !card.hasAttribute('no-tilt');
+        
         card.addEventListener('mouseenter', (e) => {
             this.createShimmerEffect(e.target);
         });
         
-        card.addEventListener('mousemove', (e) => {
-            this.updateCardTilt(e);
-        });
-        
-        card.addEventListener('mouseleave', (e) => {
-            this.resetCardTilt(e.target);
-        });
+        if (hasTilt) {
+            card.addEventListener('mousemove', (e) => {
+                this.updateCardTilt(e);
+            });
+            
+            card.addEventListener('mouseleave', (e) => {
+                this.resetCardTilt(e.target);
+            });
+        }
     }
     
     createShimmerEffect(card) {
@@ -222,21 +227,24 @@ class LuxuryCardEffects {
     
     updateCardTilt(e) {
         const card = e.currentTarget;
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
         
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+        // Use cached rect if available
+        if (!card._cachedRect) card._cachedRect = card.getBoundingClientRect();
+    
+        const x = e.clientX - card._cachedRect.left;
+        const y = e.clientY - card._cachedRect.top;
         
-        const rotateX = (y - centerY) / 10;
-        const rotateY = (centerX - x) / 10;
+        // Calculate rotation based on mouse position and card center, divide by sensitivity
+        const rotateX = (y - (card._cachedRect.height / 2)) / 20;
+        const rotateY = ((card._cachedRect.width / 2) - x) / 20;
         
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
     }
     
     resetCardTilt(card) {
         card.style.transform = '';
+        // Clear cached rect for next hover
+        delete card._cachedRect;
     }
 }
 

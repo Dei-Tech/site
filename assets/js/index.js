@@ -54,9 +54,9 @@ class LandingPageAnimations {
     // Enhance service card animations
     enhanceServiceAnimation(serviceElement) {
         // Add subtle hover enhancement
-        serviceElement.addEventListener('mouseenter', () => {
-            serviceElement.style.transform = 'translateY(-5px)';
-        });
+        // serviceElement.addEventListener('mouseenter', () => {
+        //     serviceElement.style.transform = 'translateY(-5px)';
+        // });
         
         serviceElement.addEventListener('mouseleave', () => {
             serviceElement.style.transform = 'translateY(0)';
