@@ -1,0 +1,21 @@
+{{ define "main" }}
+<section class="page-hero section">
+    <div class="container">
+        <div class="page-hero-content animate-on-scroll">
+            <h1 class="page-title">{{ .Title }}</h1>
+            <p class="page-subtitle">A list of {{ .Title }}</p>
+        </div>
+    </div>
+</section>
+<section class="page-content section">
+    <div class="container">
+        <ul>
+            {{ range .Data.Terms.ByCount }}
+            <li>
+                <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a> ({{ .Count }})
+            </li>
+            {{ end }}
+        </ul>
+    </div>
+</section>
+{{ end }}
