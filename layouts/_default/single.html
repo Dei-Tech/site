@@ -1,0 +1,56 @@
+{{ define "main" }}
+<section class="page-hero section">
+    <div class="container">
+        <div class="page-hero-content animate-on-scroll">
+            <h1 class="page-title">{{ .Title }}</h1>
+            {{ with .Description }}
+                <p class="page-subtitle">{{ . }}</p>
+            {{ end }}
+        </div>
+    </div>
+</section>
+
+<section class="page-content section">
+    <div class="container">
+        <article class="prose">
+            {{ .Content }}
+        </article>
+    </div>
+</section>
+{{ end }}
+
+{{ define "css" }}
+<style>
+.prose {
+    max-width: 800px;
+    margin: 0 auto;
+    color: var(--text-light);
+    line-height: 1.7;
+}
+.prose h2, .prose h3, .prose h4 {
+    color: var(--silver-light);
+    margin-top: 2em;
+    margin-bottom: 1em;
+}
+.prose a {
+    color: var(--gold-primary);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(218, 165, 32, 0.4);
+    transition: var(--transition-smooth);
+}
+.prose a:hover {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold-light);
+}
+.prose p {
+    margin-bottom: 1.25em;
+}
+.prose ul, .prose ol {
+    padding-left: 1.5em;
+    margin-bottom: 1.25em;
+}
+.prose li {
+    margin-bottom: 0.5em;
+}
+</style>
+{{ end }}

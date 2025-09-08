@@ -1,0 +1,74 @@
+{{ define "main" }}
+
+<!-- Hero Section -->
+<section class="page-hero section">
+    <div class="container">
+        <div class="page-hero-content animate-on-scroll">
+            <h1 class="page-title">{{ .Title }}</h1>
+            <p class="page-subtitle">{{ .Content | markdownify }}</p>
+        </div>
+    </div>
+</section>
+
+<!-- Portfolio Section -->
+<section class="portfolio-section section">
+    <div class="container">
+        <div class="section-header animate-on-scroll">
+            <h2 class="section-title">{{ .Params.section_header.title }}</h2>
+            <p class="section-subtitle">
+                {{ .Params.section_header.subtitle }}
+            </p>
+        </div>
+        
+        <div class="portfolio-grid">
+            {{ range sort .Pages "Params.order" }}
+            {{ if .Params.featured }}
+            <div class="card portfolio-item">
+                <div class="portfolio-image">
+                    {{ if .Params.image }}
+                    <img src="{{ .Params.image }}" alt="{{ .Title }}" loading="lazy">
+                    {{ else }}
+                    <div class="portfolio-placeholder">
+                        <span>{{ .Title }}</span>
+                    </div>
+                    {{ end }}
+                </div>
+                <div class="portfolio-content">
+                    <h3>{{ .Title }}</h3>
+                    <p>{{ .Content | markdownify }}</p>
+                    {{ if .Params.tags }}
+                    <div class="portfolio-tags">
+                        {{ range .Params.tags }}
+                        <span class="tag">{{ . }}</span>
+                        {{ end }}
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+            {{ end }}
+            {{ end }}
+        </div>
+    </div>
+</section>
+
+<!-- Services CTA -->
+<section class="services-cta section">
+    <div class="container">
+        <div class="cta-content animate-on-scroll">
+            <h2>{{ .Params.cta.title }}</h2>
+            <p>{{ .Params.cta.subtitle }}</p>
+            <div class="cta-actions">
+                <a href="/pricing/" class="btn btn-primary">View Our Packages</a>
+                <a href="#contact" class="btn btn-secondary">Start a Conversation</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{ end }}
+
+{{ define "css" }}
+    {{ $css := resources.Get "css/our-work.css" }}
+    {{ $style := $css | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
+{{ end }}

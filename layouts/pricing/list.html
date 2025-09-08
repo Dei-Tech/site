@@ -1,0 +1,78 @@
+{{ define "main" }}
+
+<!-- Hero Section -->
+<section class="page-hero section">
+    <div class="container">
+        <div class="page-hero-content animate-on-scroll">
+            <h1 class="page-title">{{ .Title }}</h1>
+            <p class="page-subtitle">{{ .Content | markdownify }}</p>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="pricing-section section">
+    <div class="container">
+        <div class="section-header animate-on-scroll">
+            <h2 class="section-title">{{ .Params.section_header.title }}</h2>
+            <p class="section-subtitle">
+                {{ .Params.section_header.subtitle }}
+            </p>
+        </div>
+        
+        <div class="pricing-grid">
+            {{ range sort .Pages "Params.order" }}
+            <div class="card pricing-card {{ if .Params.featured }}featured{{ end }}">
+                <div class="pricing-header">
+                    <h3>{{ .Title }}</h3>
+                    <div class="pricing-badge {{ if eq .Params.badge_type "popular" }}popular{{ end }}">{{ .Params.badge }}</div>
+                </div>
+                <div class="pricing-price">
+                    <span class="currency">$</span>
+                    <span class="amount">{{ printf "%.0f" .Params.price }}</span>
+                    <span class="period">starting</span>
+                </div>
+                <ul class="pricing-features">
+                    {{ range .Params.features }}
+                    <li>✦ {{ . }}</li>
+                    {{ end }}
+                </ul>
+                <a href="#contact" class="btn btn-{{ .Params.cta_style }} pricing-btn">{{ .Params.cta_text }}</a>
+            </div>
+            {{ end }}
+        </div>
+        
+        <div class="pricing-note animate-on-scroll">
+            <p>{{ .Params.note }}</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section section">
+    <div class="container">
+        <div class="section-header animate-on-scroll">
+            <h2 class="section-title">{{ .Params.faq_header.title }}</h2>
+            <p class="section-subtitle">
+                {{ .Params.faq_header.subtitle }}
+            </p>
+        </div>
+        
+        <div class="faq-grid">
+            {{ range .Params.faqs }}
+            <div class="faq-item animate-on-scroll">
+                <h4>{{ .question }}</h4>
+                <p>{{ .answer }}</p>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</section>
+
+{{ end }}
+
+{{ define "css" }}
+    {{ $css := resources.Get "css/pricing.css" }}
+    {{ $style := $css | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
+{{ end }}
